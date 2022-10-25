@@ -1,3 +1,7 @@
+## 3.0.0
+
+- Rename to web3dartlib, and bump to 3.0.0
+
 ## 2.3.5
 
 - Ensuring quality and performance.
