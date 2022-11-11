@@ -183,11 +183,11 @@ class Web3Client {
         .then((s) => hexToInt(s).toInt());
   }
 
-  Future<BlockInformation> getBlockInformation(
-      {String blockNumber = 'latest', bool isContainFullObj = true}) {
+  Future<BlockInformation?> getBlockInformation(
+      {String blockNumber = 'latest', bool isContainFullObj = false}) {
     return _makeRPCCall<Map<String, dynamic>>(
             'eth_getBlockByNumber', [blockNumber, isContainFullObj])
-        .then((json) => BlockInformation.fromJson(json));
+        .then((json) =>json != null ? BlockInformation.fromJson(json, isContainFullObj: isContainFullObj) : null);
   }
 
   /// Gets the balance of the account with the specified address.
@@ -235,10 +235,10 @@ class Web3Client {
 
   /// Returns the information about a transaction requested by transaction hash
   /// [transactionHash].
-  Future<TransactionInformation> getTransactionByHash(String transactionHash) {
+  Future<TransactionInformation?> getTransactionByHash(String transactionHash) {
     return _makeRPCCall<Map<String, dynamic>>(
             'eth_getTransactionByHash', [transactionHash])
-        .then((s) => TransactionInformation.fromMap(s));
+        .then((s) => s != null ? TransactionInformation.fromMap(s) : null);
   }
 
   /// Returns an receipt of a transaction based on its hash.
