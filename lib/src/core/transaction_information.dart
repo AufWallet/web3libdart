@@ -2,7 +2,7 @@ part of 'package:web3libdart/web3libdart.dart';
 
 class TransactionInformation {
   TransactionInformation.fromMap(Map<String, dynamic> map)
-      : blockHash = map['blockHash'] as String,
+      : blockHash = map['blockHash'] != null ? map['blockHash'] as String : null,
         blockNumber = map['blockNumber'] != null
             ? BlockNum.exact(int.parse(map['blockNumber'] as String))
             : const BlockNum.pending(),
@@ -22,6 +22,25 @@ class TransactionInformation {
         v = int.parse(map['v'] as String),
         r = hexToInt(map['r'] as String),
         s = hexToInt(map['s'] as String);
+
+  Map<String, dynamic> toJson() {
+    return {
+      "blockHash": blockHash,
+      "blockNumber": blockNumber.useAbsolute ? blockNumber.toString() : null,
+      "from": from.hexEip55,
+      "gas": "0x${gas.toRadixString(16)}",
+      "gasPrice": "0x${gasPrice.getInWei.toRadixString(16)}",
+      "hash": hash,
+      "input": "0x${bytesToHex(input)}",
+      "nonce": "0x${nonce.toRadixString(16)}",
+      "to": to?.hexEip55,
+      "transactionIndex": transactionIndex != null ? "0x${transactionIndex!.toRadixString(16)}" : null,
+      "value": "0x${value.getInEther.toRadixString(16)}",
+      "v": "0x${v.toRadixString(16)}",
+      "r": "0x${r.toRadixString(16)}",
+      "s": "0x${s.toRadixString(16)}"
+    };
+  }
 
   /// The hash of the block containing this transaction. If this transaction has
   /// not been mined yet and is thus in no block, it will be `null`
@@ -121,6 +140,34 @@ class TransactionReceipt {
                 .map((log) => FilterEvent.fromMap(log as Map<String, dynamic>))
                 .toList()
             : [];
+
+  Map<String, dynamic> toJson() {
+    return {
+      "transactionHash": "0x${bytesToHex(transactionHash)}",
+      "transactionIndex": "0x${transactionIndex.toRadixString(16)}",
+      "blockHash": "0x${bytesToHex(blockHash)}",
+      "blockNumber": blockNumber.toString(),
+      "from": from?.hexEip55,
+      "to": to?.hexEip55,
+      "cumulativeGasUsed": "0x${cumulativeGasUsed.toRadixString(16)}",
+      "gasUsed": gasUsed != null ? "0x${gasUsed!.toRadixString(16)}" : null,
+      "contractAddress": contractAddress != null ? contractAddress!.hexEip55 : null,
+      "logs": logs.map((e) => {
+        "removed": e.removed,
+        "logIndex": e.logIndex != null ? "0x${e.logIndex?.toRadixString(16)}" : null,
+        "transactionIndex": e.transactionIndex != null ? "0x${e.transactionIndex?.toRadixString(16)}" : null,
+        "transactionHash": e.transactionHash,
+        "blockHash": e.blockHash,
+        "blockNumber": e.blockNum,
+        "address": e.address != null ? e.address!.hexEip55 : null,
+        "data": e.data,
+        "topics": e.topics != null ? e.topics?.map((t) => t.toString()).toList(): []
+      }).toList(),
+      "logsBloom": null,
+      "root": null,
+      "status": status == true ? "0x1" : "0x0"
+    };
+  }
 
   /// Hash of the transaction (32 bytes).
   final Uint8List transactionHash;

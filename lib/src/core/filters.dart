@@ -152,6 +152,20 @@ class FilterEvent {
         data = log['data'] as String?,
         topics = (log['topics'] as List?)?.cast<String>();
 
+  Map<String, dynamic> toJson() {
+    return {
+      "removed": removed,
+      "logIndex": logIndex != null ? "0x${logIndex!.toRadixString(16)}" : null,
+      "transactionIndex": transactionIndex != null ? "0x${transactionIndex?.toRadixString(16)}" : null,
+      "transactionHash": transactionHash,
+      "blockHash": blockHash,
+      "blockNumber": blockNum,
+      "address": address != null ? address!.hexEip55 : null,
+      "data": data,
+      "topics": topics != null ? topics?.map((t) => t.toString()).toList(): []
+    };
+  }
+
   /// Whether the log was removed, due to a chain reorganization. False if it's
   /// a valid log.
   final bool? removed;

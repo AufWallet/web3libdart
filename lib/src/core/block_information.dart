@@ -85,5 +85,52 @@ class BlockInformation {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      "number": number?.toString(),
+      "hash": hash != null ? "0x${bytesToHex(hash!)}" : null,
+      "parentHash": parentHash != null ? "0x${bytesToHex(parentHash!)}" : null,
+      "nonce": nonce,
+      "sha3Uncles": sha3Uncles,
+      "logsBloom": logsBloom,
+      "transactionsRoot": transactionsRoot,
+      "stateRoot": stateRoot,
+      "receiptsRoot": receiptsRoot,
+      "miner": miner.hexEip55,
+      "difficulty": "0x${difficulty.toRadixString(16)}",
+      "totalDifficulty": "0x${totalDifficulty.toRadixString(16)}",
+      "extraData": extraData,
+      "size": size,
+      "gasLimit": "0x${gasLimit.toRadixString(16)}",
+      "gasUsed": "0x${gasUsed.toRadixString(16)}",
+      "timestamp": "0x${timestamp.millisecondsSinceEpoch.toRadixString(16)}",
+      "transactions": transactions.map((e) {
+        if (e is String) {
+          return e;
+        } else {
+          return {
+            "blockHash": e.blockHash,
+            "blockNumber": e.blockNumber.toString(),
+            "from": e.from.hexEip55,
+            "gas": "0x${e.gas.toRadixString(16)}",
+            "gasPrice": "0x${e.gasPrice.getInWei.toRadixString(16)}",
+            "hash": e.hash,
+            "input": "0x${bytesToHex(e.input)}",
+            "nonce": "0x${e.nonce.toRadixString(16)}",
+            "to": e.to?.hexEip55,
+            "transactionIndex": e.transactionIndex != null ? "0x${e.transactionIndex!.toRadixString(16)}" : null,
+            "value": "0x${e.value.getInEther.toRadixString(16)}",
+            "v": "0x${e.v.toRadixString(16)}",
+            "r": "0x${e.r.toRadixString(16)}",
+            "s": "0x${e.s.toRadixString(16)}"
+          };
+        }
+      }).toList(),
+      "uncles": uncles,
+      "mixHash": mixHash,
+      "baseFeePerGas": baseFeePerGas != null ? "0x${baseFeePerGas!.getInWei.toRadixString(16)}" : null
+    };
+  }
+
   bool get isSupportEIP1559 => baseFeePerGas != null;
 }
