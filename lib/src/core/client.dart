@@ -190,6 +190,12 @@ class Web3Client {
         .then((json) =>json != null ? BlockInformation.fromJson(json, isContainFullObj: isContainFullObj) : null);
   }
 
+  Future<BlockInformation?> getBlockByHash(String blockHash, {bool isContainFullObj = false}) {
+    return _makeRPCCall<Map<String, dynamic>>(
+        'eth_getBlockByHash', [blockHash, isContainFullObj])
+        .then((json) =>json != null ? BlockInformation.fromJson(json, isContainFullObj: isContainFullObj) : null);
+  }
+
   /// Gets the balance of the account with the specified address.
   ///
   /// This function allows specifying a custom block mined in the past to get

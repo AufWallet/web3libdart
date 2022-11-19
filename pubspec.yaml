@@ -1,6 +1,6 @@
 name: web3libdart
 description: Dart library to connect to Ethereum clients. Send transactions and interact with smart contracts!
-version: 3.0.0
+version: 3.0.1
 homepage: https://aufwallet.com
 repository: https://github.com/aufwallet/web3libdart
 
