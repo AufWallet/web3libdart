@@ -1,3 +1,7 @@
+## 3.0.1
+
+- Add toJson to main model, add `eth_getBlockByHash` rpc
+
 ## 3.0.0
 
 - Rename to web3dartlib, and bump to 3.0.0
